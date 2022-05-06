@@ -8,33 +8,38 @@ import {
   MDBCardImage,
   MDBBtn,
 } from "mdb-react-ui-kit";
+import { BulkPricing } from "./BulkPricing";
 
 export const ProductCard = ({ productId, name, description, price }) => {
   const [imageURL, setimageURL] = useState("");
+  const [bulkPricingInfos, setbulkPricingInfos] = useState([]);
+
+  async function getImage() {
+    const response = await axios({
+      method: "get",
+      url: `http://localhost:4000/products/${productId}/images`,
+    });
+    setimageURL(response.data[0].url_zoom);
+  }
 
   useEffect(() => {
-    async function getImage() {
-      const response = await axios({
-        method: "get",
-        url: `http://localhost:4000/products/${productId}/images`,
-      });
-      setimageURL(response.data[0].url_zoom);
-    }
     getImage();
   }, []);
 
   return (
     <>
       <MDBCard style={{ maxWidth: "22rem" }}>
-        <MDBCardImage src={imageURL} position="top" alt="..." />
+        <MDBCardImage src={imageURL} position="top" alt="product-image" />
         <MDBCardBody>
           <MDBCardTitle>{name}</MDBCardTitle>
           <MDBCardText>{description}</MDBCardText>
-          <div className="d-flex justify-content-between">
-            <MDBBtn href="#">Add to Cart</MDBBtn>
-            <p>{price} $</p>
-          </div>
         </MDBCardBody>
+
+        <BulkPricing
+          infos={bulkPricingInfos}
+          price={price}
+          productId={productId}
+        />
       </MDBCard>
     </>
   );
