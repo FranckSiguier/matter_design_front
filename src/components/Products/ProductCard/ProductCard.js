@@ -12,7 +12,6 @@ import { BulkPricing } from "./BulkPricing";
 
 export const ProductCard = ({ productId, name, description, price }) => {
   const [imageURL, setimageURL] = useState("");
-  const [bulkPricingInfos, setbulkPricingInfos] = useState([]);
 
   async function getImage() {
     const response = await axios({
@@ -35,11 +34,7 @@ export const ProductCard = ({ productId, name, description, price }) => {
           <MDBCardText>{description}</MDBCardText>
         </MDBCardBody>
 
-        <BulkPricing
-          infos={bulkPricingInfos}
-          price={price}
-          productId={productId}
-        />
+        <BulkPricing price={price} productId={productId} />
       </MDBCard>
     </>
   );
